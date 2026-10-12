@@ -4,24 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Local Water Information</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>💧 Local Water Information</h1>
-  </header>
-
+  <header><h1>💧 Local Water Information</h1></header>
   <main>
     <p>Select your ward</p>
-    <select id="wardSelect">
-      <option>Ward 4</option>
-    </select>
-    <button>View Water Quality</button>
-    <button>Report a Problem</button>
-    <button>Track Complaint</button>
+    <select id="wardSelect"></select>
+
+    <a class="btn" id="viewBtn" href="#">View Water Quality</a>
+    <a class="btn" href="complaint.html">Report a Problem</a>
+    <a class="btn" href="track.html">Track Complaint</a>
   </main>
 
-  <script src="js/config.js"></script>
-  <script src="js/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

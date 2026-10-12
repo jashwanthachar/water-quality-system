@@ -3,3 +3,14 @@ header { background: #0077b6; color: white; padding: 16px; text-align: center; }
 main { max-width: 500px; margin: 20px auto; padding: 16px; }
 select, button { width: 100%; padding: 12px; margin: 8px 0; font-size: 16px; border-radius: 8px; }
 button { background: #0077b6; color: white; border: none; cursor: pointer; }
+.btn { display: block; text-align: center; text-decoration: none; background: #0077b6;
+       color: white; padding: 12px; margin: 8px 0; border-radius: 8px; }
+.card { background: white; padding: 16px; margin: 12px 0; border-radius: 10px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+td, th { padding: 8px; border-bottom: 1px solid #ddd; text-align: left; }
+.badge { padding: 10px; border-radius: 8px; margin: 10px 0; font-weight: bold; }
+.badge.good { background: #d8f3dc; }
+.badge.attention { background: #fff3bf; }
+.badge.high { background: #ffd6d6; }
+small { color: #555; }
