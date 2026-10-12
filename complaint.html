@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Report a Problem</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header><h1>📝 Report Water Problem</h1></header>
+  <main>
+    <div class="card" id="formBox">
+      <label>Ward</label>
+      <select id="ward"></select>
+
+      <label>Problem</label>
+      <select id="category">
+        <option>Pipeline leakage</option>
+        <option>Muddy water</option>
+        <option>Low supply</option>
+        <option>Bad smell / taste</option>
+        <option>No supply</option>
+        <option>Other</option>
+      </select>
+
+      <label>Description</label>
+      <textarea id="description" rows="4" placeholder="Describe the problem..."></textarea>
+
+      <label>Photo (optional, max 2 MB)</label>
+      <input type="file" id="photo" accept="image/*" />
+
+      <button id="submitBtn">Submit</button>
+      <p id="error" class="error"></p>
+    </div>
+
+    <div id="success"></div>
+    <a class="btn" href="index.html">← Home</a>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/complaint.js"></script>
+</body>
+</html>
