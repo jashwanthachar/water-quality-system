@@ -1,0 +1,5 @@
+body { font-family: Arial, sans-serif; margin: 0; background: #f2f7fb; }
+header { background: #0077b6; color: white; padding: 16px; text-align: center; }
+main { max-width: 500px; margin: 20px auto; padding: 16px; }
+select, button { width: 100%; padding: 12px; margin: 8px 0; font-size: 16px; border-radius: 8px; }
+button { background: #0077b6; color: white; border: none; cursor: pointer; }
