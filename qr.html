@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ward QR Codes</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header><h1>📱 Ward QR Code</h1></header>
+  <main>
+    <div class="card" style="text-align:center">
+      <select id="ward"></select>
+      <h3 id="qrTitle"></h3>
+      <div id="qrBox" style="display:inline-block"></div>
+      <p><small id="qrLink"></small></p>
+      <a id="dl" class="btn" download="ward-qr.png" href="#">Download QR image</a>
+    </div>
+    <a class="btn" href="index.html">← Home</a>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script>
+    const sel = document.getElementById("ward");
+    let wards = [];
+
+    function draw() {
+      const w = wards.find(x => String(x.ward_id) === sel.value);
+      const url = `${window.location.origin}/water.html?ward=${w.ward_id}`;
+      document.getElementById("qrTitle").textContent = `SCAN FOR ${w.ward_name.toUpperCase()} WATER INFORMATION`;
+      document.getElementById("qrLink").textContent = url;
+      const box = document.getElementById("qrBox");
+      box.innerHTML = "";
+      new QRCode(box, { text: url, width: 240, height: 240 });
+      setTimeout(() => {
+        const canvas = box.querySelector("canvas");
+        if (canvas) {
+          const dl = document.getElementById("dl");
+          dl.href = canvas.toDataURL("image/png");
+          dl.download = `${w.ward_name.replace(/\s+/g, "-")}-qr.png`;
+        }
+      }, 200);
+    }
+
+    (async () => {
+      const { data } = await db.from("wards").select("*").order("ward_id");
+      wards = data || [];
+      sel.innerHTML = wards.map(w => `<option value="${w.ward_id}">${w.ward_name}</option>`).join("");
+      sel.addEventListener("change", draw);
+      draw();
+    })();
+  </script>
+</body>
+</html>

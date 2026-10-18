@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ward Water Hotspot Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header><h1>🗺️ Ward Water Hotspot Map</h1></header>
+  <main class="wide">
+    <div id="map"></div>
+    <p class="legend">
+      🟢 Normal &nbsp; 🟡 Attention &nbsp; 🔴 High Priority
+      <br><small>Based on complaints in the last 30 days and the latest water test record.
+      Informational only, not a laboratory result.</small>
+    </p>
+
+    <div class="card">
+      <h3>Ward summary</h3>
+      <div id="summary">Loading...</div>
+    </div>
+    <a class="btn" href="index.html">← Home</a>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/map.js"></script>
+</body>
+</html>

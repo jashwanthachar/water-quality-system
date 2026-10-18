@@ -40,3 +40,5 @@ input[type="password"], input[type="date"] {
 .bar { background: #0077b6; height: 18px; border-radius: 4px; min-width: 2px; }
 .complaint { border-top: 1px solid #ddd; padding: 12px 0; }
 .complaint select, .complaint input { margin: 4px 0; }
+#map { height: 420px; border-radius: 10px; margin: 12px 0; z-index: 0; }
+.legend { text-align: center; }
