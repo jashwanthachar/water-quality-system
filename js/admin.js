@@ -1,6 +1,7 @@
 const STATUSES = ["Submitted", "Reviewed", "In Progress", "Resolved"];
 let wards = [];
 let complaints = [];
+let tests = [];
 
 function esc(text) {
   const d = document.createElement("div");
@@ -30,12 +31,14 @@ async function init() {
 async function loadAll() {
   const [c, t] = await Promise.all([
     db.from("complaints").select("*").order("created_at", { ascending: false }),
-    db.from("water_tests").select("test_id")
+    db.from("water_tests").select("*").order("test_date", { ascending: false })
   ]);
   complaints = c.data || [];
-  renderStats(t.data ? t.data.length : 0);
+  tests = t.data || [];
+  renderStats(tests.length);
   renderBars();
   renderComplaints();
+  renderTests();
 }
 
 function renderStats(testCount) {
@@ -85,6 +88,81 @@ function renderComplaints() {
     </div>`;
   }).join("");
 }
+
+function renderTests() {
+  const box = document.getElementById("testList");
+  if (!tests.length) { box.innerHTML = "<p>No records yet.</p>"; return; }
+  box.innerHTML = `<table>
+    <tr><th>Ward</th><th>Date</th><th>pH</th><th>TDS</th><th>NTU</th><th></th></tr>
+    ${tests.slice(0, 30).map(t => {
+      const w = (wards.find(x => x.ward_id === t.ward_id) || {}).ward_name;
+      return `<tr>
+        <td>${esc(w)}</td><td>${esc(t.test_date)}</td><td>${esc(t.ph)}</td><td>${esc(t.tds)}</td><td>${esc(t.turbidity)}</td>
+        <td>
+          <button class="small-btn" onclick="editTest(${t.test_id})">Edit</button>
+          <button class="small-btn" style="background:#c1121f" onclick="deleteTest(${t.test_id})">Delete</button>
+        </td></tr>`;
+    }).join("")}
+  </table><small>Showing the latest 30 records.</small>`;
+}
+
+async function editTest(id) {
+  const t = tests.find(x => x.test_id === id);
+  if (!t) return;
+  const ph = parseFloat(prompt("pH (0-14):", t.ph));
+  const tds = parseFloat(prompt("TDS (mg/L):", t.tds));
+  const turb = parseFloat(prompt("Turbidity (NTU):", t.turbidity));
+
+  if ([ph, tds, turb].some(isNaN) || ph < 0 || ph > 14 || tds < 0 || turb < 0) {
+    alert("Invalid values. Nothing changed.");
+    return;
+  }
+  const { error } = await db.from("water_tests")
+    .update({ ph, tds, turbidity: turb }).eq("test_id", id);
+  if (error) { alert("Could not update."); console.error(error); return; }
+  await loadAll();
+}
+
+async function deleteTest(id) {
+  if (!confirm("Delete this test record permanently?")) return;
+  const { error } = await db.from("water_tests").delete().eq("test_id", id);
+  if (error) { alert("Could not delete."); console.error(error); return; }
+  await loadAll();
+}
+
+// Neutralise formula-like values before writing them to CSV for spreadsheet apps.
+function downloadCSV(filename, rows) {
+  const clean = v => {
+    let s = String(v ?? "");
+    if (/^[=+\-@]/.test(s)) s = "'" + s;
+    return `"${s.replace(/"/g, '""')}"`;
+  };
+  const csv = rows.map(r => r.map(clean).join(",")).join("\n");
+  const a = document.createElement("a");
+  const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById("csvComplaints").addEventListener("click", () => {
+  const rows = [["Complaint ID", "Ward", "Category", "Description", "Status", "Date"]];
+  complaints.forEach(c => {
+    const w = (wards.find(x => x.ward_id === c.ward_id) || {}).ward_name;
+    rows.push([`W${c.ward_id}-${c.complaint_id}`, w, c.category, c.description, c.status, c.created_at]);
+  });
+  downloadCSV("complaints-report.csv", rows);
+});
+
+document.getElementById("csvTests").addEventListener("click", () => {
+  const rows = [["Ward", "Test date", "pH", "TDS", "Turbidity", "Source", "Remarks"]];
+  tests.forEach(t => {
+    const w = (wards.find(x => x.ward_id === t.ward_id) || {}).ward_name;
+    rows.push([w, t.test_date, t.ph, t.tds, t.turbidity, t.source, t.remarks]);
+  });
+  downloadCSV("water-tests-report.csv", rows);
+});
 
 async function updateStatus(id) {
   const status = document.getElementById(`st-${id}`).value;
