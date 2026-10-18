@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header><h1>📊 Admin Dashboard</h1></header>
+  <main class="wide">
+    <button id="logoutBtn" class="small-btn">Logout</button>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="card">
+      <h3>Ward-wise complaints</h3>
+      <div id="wardBars"></div>
+    </div>
+
+    <div class="card">
+      <h3>Add Water Test Record</h3>
+      <label>Ward</label><select id="tWard"></select>
+      <label>Test date</label><input type="date" id="tDate" />
+      <label>pH</label><input type="text" id="tPh" placeholder="7.2" />
+      <label>TDS (mg/L)</label><input type="text" id="tTds" placeholder="430" />
+      <label>Turbidity (NTU)</label><input type="text" id="tTurb" placeholder="1.5" />
+      <label>Source</label><input type="text" id="tSource" placeholder="Local Water Testing Unit" />
+      <label>Remarks</label><input type="text" id="tRemarks" />
+      <button id="addTestBtn">Save Test Record</button>
+      <p id="testMsg"></p>
+    </div>
+
+    <div class="card">
+      <h3>Complaints</h3>
+      <label>Filter by ward</label>
+      <select id="filterWard"></select>
+      <div id="complaintList"></div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
