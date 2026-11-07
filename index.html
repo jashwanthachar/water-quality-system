@@ -37,7 +37,7 @@
     <!-- Hero Section -->
     <section class="hero">
       <div class="hero-content">
-        <h2 class="hero-title">Clean & Safe Water<br>for Our Community</h2>
+        <h2 class="hero-title">Local Water Information<br>for Our Community</h2>
         <p class="hero-subtitle">Check water quality, report issues, and track resolutions — all in one place.</p>
         <div class="hero-accent"></div>
       </div>
@@ -69,7 +69,7 @@
           <div class="wqi-label" id="wqiWardLabel">Water Quality (Ward 1)</div>
           <div class="wqi-status-badge">
             <span class="wqi-status-icon" id="wqiIcon">✓</span>
-            <span id="wqiStatusText">Safe to Use</span>
+            <span id="wqiStatusText">Within Reference Limits</span>
           </div>
           <div class="wqi-date" id="wqiDate">Checking latest records...</div>
         </div>
@@ -82,9 +82,10 @@
           <div class="gauge-score">
             <span id="wqiScore">92</span><small>/100</small>
           </div>
-          <div class="gauge-label">Water Quality Index ⓘ</div>
+          <div class="gauge-label">Reference Score <span id="scoreInfoBtn" class="score-info-icon" title="View Calculation Formula">ⓘ</span></div>
         </div>
       </a>
+      <p class="wqi-disclaimer">Informational comparison with BIS IS 10500 limits. Not a laboratory certificate.</p>
 
       <!-- Quick Actions Section -->
       <div class="section-header">
@@ -163,9 +164,9 @@
         <span class="nav-icon">💧</span>
         <span>Water Quality</span>
       </a>
-      <a href="scan.html" class="nav-link">
-        <span class="nav-icon">📷</span>
-        <span>Scan QR</span>
+      <a href="qr.html" class="nav-link">
+        <span class="nav-icon">📱</span>
+        <span>Ward QR</span>
       </a>
       <a href="my-complaints.html" class="nav-link">
         <span class="nav-icon">📝</span>

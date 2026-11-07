@@ -59,13 +59,22 @@ async function updateWard() {
 
   const t = tests[0];
 
-  // Calculate WQI (Water Quality Index 0 - 100) based on BIS limits
-  let score = 95;
-  if (Math.abs(t.ph - 7.2) > 0.5) score -= Math.abs(t.ph - 7.2) * 14;
-  if (t.tds > 300) score -= Math.min(25, (t.tds - 300) / 20);
-  if (t.turbidity > 1) score -= Math.min(20, (t.turbidity - 1) * 8);
-  score = Math.max(25, Math.min(98, Math.round(score)));
+  // Calculate Reference Score (0 - 100) based strictly on BIS IS 10500 limits:
+  let score = 100;
 
+  // 1. pH penalty (acceptable: 6.5 - 8.5)
+  if (t.ph < 6.5) score -= Math.min(30, (6.5 - t.ph) * 20);
+  else if (t.ph > 8.5) score -= Math.min(30, (t.ph - 8.5) * 20);
+  else if (Math.abs(t.ph - 7.2) > 0.4) score -= (Math.abs(t.ph - 7.2) - 0.4) * 8;
+
+  // 2. TDS penalty (acceptable <= 500, permissible <= 2000 mg/L)
+  if (t.tds > 500) score -= Math.min(35, 10 + ((t.tds - 500) / 1500) * 25);
+  else if (t.tds > 300) score -= ((t.tds - 300) / 200) * 8;
+
+  // 3. Turbidity penalty (acceptable <= 1, permissible <= 5 NTU)
+  if (t.turbidity > 1) score -= Math.min(35, 10 + ((t.turbidity - 1) / 4) * 25);
+
+  score = Math.max(15, Math.min(99, Math.round(score)));
   scoreSpan.textContent = score;
 
   // Arc length is ~120 in the SVG path
@@ -73,17 +82,17 @@ async function updateWard() {
   arcPath.style.strokeDashoffset = offset;
 
   if (score >= 82) {
-    statusText.textContent = "Safe to Use";
+    statusText.textContent = "Within Reference Limits";
     iconSpan.textContent = "✓";
     iconSpan.className = "wqi-status-icon";
     arcPath.style.stroke = "#22d3ee";
   } else if (score >= 60) {
-    statusText.textContent = "Attention Needed";
+    statusText.textContent = "Above Acceptable Limit";
     iconSpan.textContent = "!";
     iconSpan.className = "wqi-status-icon attention";
     arcPath.style.stroke = "#f59e0b";
   } else {
-    statusText.textContent = "Unsafe to Drink";
+    statusText.textContent = "Outside Permissible Limit";
     iconSpan.textContent = "✕";
     iconSpan.className = "wqi-status-icon high";
     arcPath.style.stroke = "#ef4444";
@@ -95,4 +104,29 @@ async function updateWard() {
 const selElement = document.getElementById("wardSelect");
 selElement.addEventListener("change", updateWard);
 selElement.addEventListener("input", updateWard);
+
+const scoreInfoBtn = document.getElementById("scoreInfoBtn");
+if (scoreInfoBtn) {
+  scoreInfoBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    alert(
+      "📊 How the Reference Score (0 - 100) is calculated:\n\n" +
+      "Base Score = 100 points\n\n" +
+      "Evaluated mathematically against BIS IS 10500 Drinking Water specifications:\n" +
+      "• pH (Acceptable: 6.5 – 8.5):\n" +
+      "   Deducts up to 30 points if water is acidic (<6.5) or alkaline (>8.5).\n" +
+      "• TDS (Acceptable: ≤ 500 mg/L, Permissible: ≤ 2000 mg/L):\n" +
+      "   Deducts up to 35 points if dissolved solids exceed acceptable limits.\n" +
+      "• Turbidity (Acceptable: ≤ 1 NTU, Permissible: ≤ 5 NTU):\n" +
+      "   Deducts up to 35 points for suspended particulates.\n\n" +
+      "Categories:\n" +
+      "• 82 – 100: Within Reference Limits\n" +
+      "• 60 – 81: Above Acceptable Limit\n" +
+      "• Below 60: Outside Permissible Limit\n\n" +
+      "*Informational mathematical indicator. Not a laboratory certification."
+    );
+  });
+}
+
 loadWards();

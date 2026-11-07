@@ -421,6 +421,28 @@ body {
   margin-top: 3px;
 }
 
+.score-info-icon {
+  display: inline-block;
+  cursor: pointer;
+  padding: 0 4px;
+  color: #bae6fd;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.score-info-icon:hover {
+  color: #ffffff;
+}
+
+.wqi-disclaimer {
+  font-size: 11.5px;
+  color: #64748b;
+  text-align: center;
+  margin: -10px 0 16px 0;
+  font-style: italic;
+  line-height: 1.4;
+}
+
 /* Quick Actions Grid */
 .actions-grid {
   display: grid;
