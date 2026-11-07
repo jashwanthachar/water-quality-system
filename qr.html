@@ -10,12 +10,36 @@
   <header><h1>📱 Ward QR Code</h1></header>
   <main>
     <div class="card" style="text-align:center">
+      <label for="ward">Select Ward:</label>
       <select id="ward"></select>
-      <h3 id="qrTitle"></h3>
-      <div id="qrBox" style="display:inline-block"></div>
-      <p><small id="qrLink"></small></p>
-      <a id="dl" class="btn" download="ward-qr.png" href="#">Download QR image</a>
+
+      <div id="localWarning" class="banner warning" style="display:none; text-align:left;">
+        <b>⚠️ Phone Scanning Notice:</b><br>
+        You are currently viewing on <code>localhost / 127.0.0.1</code>. If you scan this code with your phone camera, your phone cannot connect to <code>127.0.0.1</code> on your PC.
+        <br><br>
+        To test scanning on your phone (on the same Wi-Fi):
+        <br>
+        <button type="button" id="useWifiBtn" class="small-btn" style="background:#0077b6; color:white; margin:6px 0; cursor:pointer;">
+          📡 Switch QR to PC Wi-Fi IP (192.168.31.100)
+        </button>
+        <br>
+        <small>Or open <b><a id="lanUrlLink" href="http://192.168.31.100:5500" target="_blank" style="color:#0077b6;">http://192.168.31.100:5500</a></b> directly on your phone's browser.</small>
+      </div>
+
+      <div style="text-align:left; margin: 10px 0;">
+        <label for="baseUrl">QR Destination Base URL:</label>
+        <input type="text" id="baseUrl" />
+        <small style="color:#666;">This is the website address encoded into the QR code.</small>
+      </div>
+
+      <h3 id="qrTitle" style="margin-top:16px;"></h3>
+      <div id="qrBox" style="display:inline-block; margin: 12px 0;"></div>
+      <p><small id="qrLink" style="word-break:break-all; font-weight:bold; color:#0077b6;"></small></p>
+
+      <a id="dl" class="btn" download="ward-qr.png" href="#">⬇️ Download QR image</a>
+      <a class="btn btn-scan" href="scan.html">📷 Test Scanner on Camera</a>
     </div>
+
     <a class="btn" href="index.html">← Home</a>
   </main>
 
@@ -24,16 +48,50 @@
   <script src="js/config.js"></script>
   <script>
     const sel = document.getElementById("ward");
+    const baseUrlInput = document.getElementById("baseUrl");
+    const localWarning = document.getElementById("localWarning");
+    const useWifiBtn = document.getElementById("useWifiBtn");
     let wards = [];
 
+    // Calculate current folder path
+    const currentPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+    let initialBase = window.location.origin + currentPath;
+
+    // Detect if running on localhost / loopback
+    const isLocalhost = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost";
+    const localWifiIp = "192.168.31.100";
+    const port = window.location.port ? `:${window.location.port}` : "";
+    const wifiBase = `http://${localWifiIp}${port}${currentPath}`;
+
+    if (isLocalhost) {
+      localWarning.style.display = "block";
+      document.getElementById("lanUrlLink").href = `http://${localWifiIp}${port}${currentPath}`;
+      document.getElementById("lanUrlLink").textContent = `http://${localWifiIp}${port}${currentPath}`;
+    }
+
+    baseUrlInput.value = initialBase;
+
+    useWifiBtn.addEventListener("click", () => {
+      baseUrlInput.value = wifiBase;
+      draw();
+    });
+
+    baseUrlInput.addEventListener("input", draw);
+
     function draw() {
-      const w = wards.find(x => String(x.ward_id) === sel.value);
-      const url = `${window.location.origin}/water.html?ward=${w.ward_id}`;
+      if (!wards.length) return;
+      const w = wards.find(x => String(x.ward_id) === sel.value) || wards[0];
+      
+      let base = baseUrlInput.value.trim();
+      if (!base.endsWith("/")) base += "/";
+      const url = `${base}water.html?ward=${w.ward_id}`;
+
       document.getElementById("qrTitle").textContent = `SCAN FOR ${w.ward_name.toUpperCase()} WATER INFORMATION`;
       document.getElementById("qrLink").textContent = url;
       const box = document.getElementById("qrBox");
       box.innerHTML = "";
       new QRCode(box, { text: url, width: 240, height: 240 });
+
       setTimeout(() => {
         const canvas = box.querySelector("canvas");
         if (canvas) {
@@ -47,9 +105,11 @@
     (async () => {
       const { data } = await db.from("wards").select("*").order("ward_id");
       wards = data || [];
-      sel.innerHTML = wards.map(w => `<option value="${w.ward_id}">${w.ward_name}</option>`).join("");
-      sel.addEventListener("change", draw);
-      draw();
+      if (wards.length) {
+        sel.innerHTML = wards.map(w => `<option value="${w.ward_id}">${w.ward_name}</option>`).join("");
+        sel.addEventListener("change", draw);
+        draw();
+      }
     })();
   </script>
 </body>

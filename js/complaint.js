@@ -1,3 +1,11 @@
+function saveMyComplaint(complaintId, wardId) {
+  try {
+    const list = JSON.parse(localStorage.getItem("myComplaints") || "[]");
+    list.unshift({ id: complaintId, ward: wardId });
+    localStorage.setItem("myComplaints", JSON.stringify(list.slice(0, 50)));
+  } catch (e) { console.error(e); }
+}
+
 async function loadWards() {
   const select = document.getElementById("ward");
   const { data } = await db.from("wards").select("*").order("ward_id");
@@ -58,6 +66,7 @@ async function submitComplaint() {
   }
 
   const complaintCode = `W${data.ward_id}-${data.complaint_id}`;
+  saveMyComplaint(data.complaint_id, data.ward_id);
   document.getElementById("formBox").style.display = "none";
   document.getElementById("success").innerHTML = `
     <div class="card">

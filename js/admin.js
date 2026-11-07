@@ -108,18 +108,28 @@ function renderTests() {
 
 async function editTest(id) {
   const t = tests.find(x => x.test_id === id);
-  if (!t) return;
+  const date = prompt("Test date (YYYY-MM-DD):", t.test_date);
   const ph = parseFloat(prompt("pH (0-14):", t.ph));
   const tds = parseFloat(prompt("TDS (mg/L):", t.tds));
   const turb = parseFloat(prompt("Turbidity (NTU):", t.turbidity));
+  const source = prompt("Source:", t.source || "");
+  const remarks = prompt("Remarks:", t.remarks || "");
 
-  if ([ph, tds, turb].some(isNaN) || ph < 0 || ph > 14 || tds < 0 || turb < 0) {
+  if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+      [ph, tds, turb].some(isNaN) || ph < 0 || ph > 14 || tds < 0 || turb < 0) {
     alert("Invalid values. Nothing changed.");
     return;
   }
   const { error } = await db.from("water_tests")
-    .update({ ph, tds, turbidity: turb }).eq("test_id", id);
-  if (error) { alert("Could not update."); console.error(error); return; }
+    .update({ test_date: date, ph, tds, turbidity: turb, source: source || null, remarks: remarks || null })
+    .eq("test_id", id);
+  if (error) {
+    alert(error.code === "23505"
+      ? "A record for this ward and date already exists."
+      : "Could not update.");
+    console.error(error);
+    return;
+  }
   await loadAll();
 }
 
@@ -193,7 +203,13 @@ async function addTest() {
     remarks: document.getElementById("tRemarks").value.trim() || null
   });
 
-  if (error) { msg.textContent = "❌ Could not save."; console.error(error); return; }
+  if (error) {
+    msg.textContent = error.code === "23505"
+      ? "❌ A record for this ward and date already exists. Use Edit instead."
+      : "❌ Could not save.";
+    console.error(error);
+    return;
+  }
   msg.textContent = "✅ Test record saved.";
   ["tPh", "tTds", "tTurb", "tSource", "tRemarks"].forEach(i => document.getElementById(i).value = "");
   await loadAll();

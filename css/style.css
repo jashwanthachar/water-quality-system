@@ -42,3 +42,15 @@ input[type="password"], input[type="date"] {
 .complaint select, .complaint input { margin: 4px 0; }
 #map { height: 420px; border-radius: 10px; margin: 12px 0; z-index: 0; }
 .legend { text-align: center; }
+.btn-secondary { background: #4a5568; }
+.btn-secondary:hover { background: #2d3748; }
+.btn-outline { background: transparent; border: 2px solid #0077b6; color: #0077b6; }
+.btn-outline:hover { background: #0077b6; color: white; }
+.btn-scan { background: #2b9348; }
+.btn-scan:hover { background: #1b6a32; }
+.banner { padding: 12px; border-radius: 8px; margin: 12px 0; font-size: 14px; text-align: left; }
+.banner.warning { background: #fff3bf; color: #856404; border: 1px solid #ffeeba; }
+.banner.info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+footer { text-align: center; margin-top: 32px; padding: 16px 0; border-top: 1px solid #ddd; }
+footer a { color: #555; text-decoration: none; font-size: 14px; margin: 0 8px; }
+footer a:hover { text-decoration: underline; color: #0077b6; }

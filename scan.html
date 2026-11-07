@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scan Ward QR Code</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    #reader {
+      width: 100%;
+      max-width: 400px;
+      margin: 12px auto;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+      min-height: 250px;
+    }
+    #reader video {
+      border-radius: 10px;
+      width: 100% !important;
+      height: auto !important;
+    }
+    .scan-status {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header><h1>📷 Scan Ward QR Code</h1></header>
+  <main>
+    <div class="card" style="text-align:center">
+      <p>Point your camera at a ward water information QR code.</p>
+
+      <div id="reader"></div>
+      <div id="scanStatus" class="scan-status" style="display:none;"></div>
+
+      <div style="margin-top: 16px;">
+        <p><small>Or select a photo containing a QR code:</small></p>
+        <input type="file" id="qrFileInput" accept="image/*" style="display:none;" />
+        <button type="button" class="btn btn-outline" onclick="document.getElementById('qrFileInput').click()">
+          📁 Upload QR Image from Gallery
+        </button>
+      </div>
+    </div>
+
+    <a class="btn" href="index.html">← Home</a>
+  </main>
+
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script>
+    const statusBox = document.getElementById("scanStatus");
+
+    function setStatus(msg, isSuccess = false) {
+      statusBox.style.display = "block";
+      statusBox.textContent = msg;
+      statusBox.style.background = isSuccess ? "#d8f3dc" : "#fff3bf";
+      statusBox.style.color = isSuccess ? "#1b4332" : "#856404";
+    }
+
+    function handleDecodedText(decodedText) {
+      setStatus("✅ QR Code Detected! Redirecting...", true);
+      
+      try {
+        if (scanner) {
+          scanner.stop().catch(console.error);
+        }
+      } catch (e) {}
+
+      // Check if it has a ward parameter (e.g. ?ward=3 or ward=3)
+      const wardMatch = decodedText.match(/[?&]ward=(\d+)/i) || decodedText.match(/^(\d+)$/);
+      if (wardMatch) {
+        const wardId = wardMatch[1];
+        window.location.href = `water.html?ward=${wardId}`;
+        return;
+      }
+
+      // If it is a full or relative URL pointing to water.html
+      if (decodedText.includes("water.html")) {
+        window.location.href = decodedText;
+        return;
+      }
+
+      // If it is any valid URL
+      if (decodedText.startsWith("http://") || decodedText.startsWith("https://")) {
+        window.location.href = decodedText;
+        return;
+      }
+
+      setStatus(`Scanned: ${decodedText}. (Not a recognized ward QR code)`);
+    }
+
+    let scanner = null;
+    function startCamera() {
+      scanner = new Html5Qrcode("reader");
+      const config = { fps: 10, qrbox: { width: 220, height: 220 } };
+
+      scanner.start(
+        { facingMode: "environment" },
+        config,
+        (decodedText) => handleDecodedText(decodedText),
+        (errorMessage) => {
+          // Frame decode errors can be safely ignored while camera seeks
+        }
+      ).catch(err => {
+        console.warn("Camera start failed:", err);
+        document.getElementById("reader").innerHTML = `
+          <div style="padding:20px; color:#c1121f; background:#fff;">
+            <p>📷 Camera could not be opened automatically.</p>
+            <p><small>${err?.message || "Please grant camera permissions in your mobile browser, or use the photo upload below."}</small></p>
+          </div>`;
+      });
+    }
+
+    // Support gallery file upload
+    document.getElementById("qrFileInput").addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const fileScanner = new Html5Qrcode("reader");
+      try {
+        setStatus("Reading image file...");
+        const result = await fileScanner.scanFile(file, true);
+        handleDecodedText(result);
+      } catch (err) {
+        setStatus("❌ Could not find a valid QR code in that image.");
+      }
+    });
+
+    window.addEventListener("DOMContentLoaded", startCamera);
+  </script>
+</body>
+</html>
