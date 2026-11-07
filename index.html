@@ -54,12 +54,13 @@
       </div>
 
       <!-- Custom Ward Dropdown -->
-      <div class="ward-picker-card">
+      <div class="ward-picker-card" id="wardPickerCard">
         <div class="ward-picker-icon">🏛️</div>
-        <select id="wardSelect" class="ward-picker-select">
+        <div class="ward-picker-display" id="wardDisplay">Ward 1</div>
+        <div class="ward-picker-arrow">▼</div>
+        <select id="wardSelect" class="ward-picker-select-overlay" aria-label="Select Ward">
           <option value="">Loading wards...</option>
         </select>
-        <div class="ward-picker-arrow">▼</div>
       </div>
 
       <!-- Water Quality Live Status Card -->

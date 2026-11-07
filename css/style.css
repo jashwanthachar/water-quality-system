@@ -235,16 +235,23 @@ body {
 
 /* Ward Select Box */
 .ward-picker-card {
+  position: relative;
   background: #ffffff;
   border: 1.5px solid #dbeafe;
   border-radius: var(--radius-md);
-  padding: 10px 14px;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
   box-shadow: 0 2px 8px rgba(2, 132, 199, 0.06);
-  position: relative;
   margin-bottom: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ward-picker-card:hover {
+  border-color: #93c5fd;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12);
 }
 
 .ward-picker-icon {
@@ -252,27 +259,53 @@ body {
   color: #0369a1;
   display: flex;
   align-items: center;
+  pointer-events: none;
 }
 
-.ward-picker-select {
+.ward-picker-display {
   flex: 1;
-  border: none;
-  background: transparent;
+  margin-left: 10px;
   font-size: 15px;
   font-weight: 700;
   color: #0f172a;
-  outline: none;
-  cursor: pointer;
-  padding: 4px 0;
-  font-family: inherit;
-  appearance: none;
-  -webkit-appearance: none;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ward-picker-arrow {
-  color: #64748b;
-  font-size: 13px;
+  color: #0284c7;
+  font-size: 12px;
+  font-weight: bold;
   pointer-events: none;
+  background: #e0f2fe;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.ward-picker-card:hover .ward-picker-arrow {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+/* Invisible overlay select that covers the entire card */
+.ward-picker-select-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 10;
+  font-size: 16px; /* Prevents auto-zoom on mobile */
 }
 
 /* Water Quality Status Banner Card */

@@ -23,6 +23,9 @@ async function updateWard() {
   const wardObj = wardsList.find(w => String(w.ward_id) === String(id));
   const wardName = wardObj ? wardObj.ward_name : `Ward ${id}`;
 
+  const display = document.getElementById("wardDisplay");
+  if (display) display.textContent = wardName;
+
   // Update navigation links for this ward
   document.getElementById("viewBtn").href = `water.html?ward=${id}`;
   document.getElementById("reportProblemBtn").href = `complaint.html?ward=${id}`;
@@ -89,5 +92,7 @@ async function updateWard() {
   dateSpan.textContent = `Last Tested: ${t.test_date}${t.source ? ' • ' + t.source : ''}`;
 }
 
-document.getElementById("wardSelect").addEventListener("change", updateWard);
+const selElement = document.getElementById("wardSelect");
+selElement.addEventListener("change", updateWard);
+selElement.addEventListener("input", updateWard);
 loadWards();
