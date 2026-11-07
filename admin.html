@@ -3,58 +3,91 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin Dashboard</title>
+  <title>Admin Dashboard - Local Water System</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
-  <header><h1>📊 Admin Dashboard</h1></header>
-  <main class="wide">
-    <button id="logoutBtn" class="small-btn">Logout</button>
-    <a class="small-btn" href="map.html" style="display:inline-block;text-decoration:none;color:white;padding:8px 16px;border-radius:8px">Hotspot Map</a>
-    <a class="small-btn" href="qr.html" style="display:inline-block;text-decoration:none;color:white;padding:8px 16px;border-radius:8px">Ward QR Codes</a>
-    <a class="small-btn" href="index.html" style="display:inline-block;text-decoration:none;color:white;padding:8px 16px;border-radius:8px">Citizen Home</a>
+<body style="padding-bottom: 30px;">
+  <header class="top-nav" style="padding: 16px 24px;">
+    <div class="brand">
+      <div class="brand-icon">📊</div>
+      <div class="brand-text">
+        <h1>Admin Control Dashboard</h1>
+        <p>Ward-level Water Quality & Grievance Management</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <a class="small-btn" href="map.html" style="color:white; text-decoration:none;">Hotspot Map</a>
+      <a class="small-btn" href="qr.html" style="color:white; text-decoration:none;">Ward QR Codes</a>
+      <a class="small-btn" href="index.html" style="background: rgba(255,255,255,0.2); color:white; text-decoration:none;">Citizen View</a>
+      <button id="logoutBtn" class="small-btn" style="background: #ef4444; color:white; border:none;">Logout</button>
+    </div>
+  </header>
 
+  <main style="max-width: 920px; margin: 24px auto; padding: 0 16px;">
     <div class="stats" id="stats"></div>
 
     <div class="card">
-      <h3>Hotspot Areas</h3>
+      <h3>🗺️ Hotspot Areas Live View</h3>
       <iframe src="map.html" title="Hotspot map"
-              style="width:100%; height:620px; border:0; border-radius:8px"></iframe>
+              style="width:100%; height:580px; border:1px solid #e2e8f0; border-radius:12px; margin-top:8px;"></iframe>
     </div>
 
     <div class="card">
-      <h3>Ward-wise complaints</h3>
-      <div id="wardBars"></div>
+      <h3>📈 Ward-wise Complaints Volume</h3>
+      <div id="wardBars" style="margin-top: 12px;"></div>
     </div>
 
     <div class="card">
-      <h3>Add Water Test Record</h3>
-      <label>Ward</label><select id="tWard"></select>
-      <label>Test date</label><input type="date" id="tDate" />
-      <label>pH</label><input type="text" id="tPh" placeholder="7.2" />
-      <label>TDS (mg/L)</label><input type="text" id="tTds" placeholder="430" />
-      <label>Turbidity (NTU)</label><input type="text" id="tTurb" placeholder="1.5" />
-      <label>Source</label><input type="text" id="tSource" placeholder="Local Water Testing Unit" />
-      <label>Remarks</label><input type="text" id="tRemarks" />
-      <button id="addTestBtn">Save Test Record</button>
-      <p id="testMsg"></p>
+      <h3>🧪 Add Water Test Record</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+        <div>
+          <label for="tWard">Ward</label>
+          <select id="tWard"></select>
+        </div>
+        <div>
+          <label for="tDate">Test Date</label>
+          <input type="date" id="tDate" />
+        </div>
+        <div>
+          <label for="tPh">pH (6.5 - 8.5)</label>
+          <input type="text" id="tPh" placeholder="7.2" />
+        </div>
+        <div>
+          <label for="tTds">TDS (mg/L)</label>
+          <input type="text" id="tTds" placeholder="430" />
+        </div>
+        <div>
+          <label for="tTurb">Turbidity (NTU)</label>
+          <input type="text" id="tTurb" placeholder="1.5" />
+        </div>
+        <div>
+          <label for="tSource">Testing Source / Unit</label>
+          <input type="text" id="tSource" placeholder="Central Lab Unit" />
+        </div>
+      </div>
+      <label for="tRemarks">Remarks (optional)</label>
+      <input type="text" id="tRemarks" placeholder="Normal seasonal test" />
+      <button id="addTestBtn" style="margin-top: 8px;">Save Test Record</button>
+      <p id="testMsg" style="margin-top: 8px; font-weight: 600;"></p>
     </div>
 
     <div class="card">
-      <h3>Water Test Records</h3>
-      <div id="testList"></div>
+      <h3>📋 Recent Water Test Records</h3>
+      <div id="testList" style="overflow-x: auto;"></div>
     </div>
 
     <div class="card">
-      <h3>Download Reports</h3>
-      <button id="csvComplaints">Download Complaints (CSV)</button>
-      <button id="csvTests">Download Water Tests (CSV)</button>
+      <h3>📥 Export Reports (CSV)</h3>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <button id="csvComplaints" style="flex: 1; min-width: 200px;">Download Complaints (CSV)</button>
+        <button id="csvTests" style="flex: 1; min-width: 200px; background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);">Download Water Tests (CSV)</button>
+      </div>
     </div>
 
     <div class="card">
-      <h3>Complaints</h3>
-      <label>Filter by ward</label>
-      <select id="filterWard"></select>
+      <h3>📝 Public Complaints</h3>
+      <label for="filterWard">Filter by Ward</label>
+      <select id="filterWard" style="margin-bottom: 16px;"></select>
       <div id="complaintList"></div>
     </div>
   </main>

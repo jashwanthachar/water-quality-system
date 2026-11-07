@@ -7,18 +7,53 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header><h1>🔐 Admin Login</h1></header>
-  <main>
-    <div class="card">
-      <label>Email</label>
-      <input type="text" id="email" />
-      <label>Password</label>
-      <input type="password" id="password" />
-      <button id="loginBtn">Login</button>
-      <p id="error" class="error"></p>
-    </div>
-    <a class="btn" href="index.html">← Home</a>
-  </main>
+  <div class="app-container">
+    <header class="page-header">
+      <a href="index.html" class="back-btn">←</a>
+      <h1>🔐 Admin Portal Login</h1>
+    </header>
+
+    <main class="main-content">
+      <div class="card" style="margin-top: 24px;">
+        <h3 style="margin-bottom: 6px;">Authorized Access Only</h3>
+        <p style="font-size: 13px; color: #64748b; margin-bottom: 16px;">Sign in with your municipal authority credentials to manage water records and complaints.</p>
+
+        <label for="email">Staff Email</label>
+        <input type="text" id="email" placeholder="admin@water.gov" />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" />
+
+        <button id="loginBtn" style="margin-top: 14px;">Sign In to Dashboard</button>
+        <p id="error" class="error"></p>
+      </div>
+
+      <a class="btn btn-outline" href="index.html">← Back to Citizen Home</a>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-link">
+        <span class="nav-icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="water.html" class="nav-link">
+        <span class="nav-icon">💧</span>
+        <span>Water Quality</span>
+      </a>
+      <a href="scan.html" class="nav-link">
+        <span class="nav-icon">📷</span>
+        <span>Scan QR</span>
+      </a>
+      <a href="my-complaints.html" class="nav-link">
+        <span class="nav-icon">📝</span>
+        <span>Complaints</span>
+      </a>
+      <a href="map.html" class="nav-link">
+        <span class="nav-icon">📍</span>
+        <span>Map</span>
+      </a>
+    </nav>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>

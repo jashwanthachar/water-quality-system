@@ -3,30 +3,179 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Local Water Information</title>
+  <title>Local Water Information System</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header><h1>💧 Local Water Information</h1></header>
-  <main>
-    <p>Select your ward</p>
-    <select id="wardSelect"></select>
+  <div class="app-container">
+    <!-- Top App Bar -->
+    <header class="top-nav">
+      <div class="brand">
+        <div class="brand-icon">💧</div>
+        <div class="brand-text">
+          <h1>Local Water Information System</h1>
+          <p>Ward-level Water Quality & Service Portal</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <a href="#" class="icon-btn" title="Notifications" onclick="alert('System Status: All ward monitoring stations and sensors online.'); return false;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="badge-dot"></span>
+        </a>
+        <a href="admin-login.html" class="icon-btn" title="Admin Portal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </a>
+      </div>
+    </header>
 
-    <a class="btn" id="viewBtn" href="#">View Water Quality</a>
-    <a class="btn btn-scan" href="scan.html">📷 Scan Ward QR Code</a>
-    <a class="btn" href="complaint.html">Report a Problem</a>
-    <a class="btn" href="track.html">Track Complaint</a>
-    <a class="btn" href="my-complaints.html">My Complaints</a>
-    <a class="btn" href="map.html">View Hotspot Map</a>
-    <a class="btn" href="qr.html">📱 Ward QR Codes</a>
-    <a class="btn btn-secondary" href="admin-login.html">🔐 Admin Login</a>
-  </main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h2 class="hero-title">Clean & Safe Water<br>for Our Community</h2>
+        <p class="hero-subtitle">Check water quality, report issues, and track resolutions — all in one place.</p>
+        <div class="hero-accent"></div>
+      </div>
+      <div class="hero-wave"></div>
+    </section>
 
-  <footer>
-    <a href="admin-login.html">🔐 Admin Login</a>
-    <a href="qr.html">📱 Ward QR Codes</a>
-    <a href="scan.html">📷 Scan QR</a>
-  </footer>
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Section: Select Ward -->
+      <div class="section-header" style="margin-top: 0;">
+        <div class="section-title">
+          <span style="color: #0284c7;">📍</span> Select Your Ward
+        </div>
+      </div>
+
+      <!-- Custom Ward Dropdown -->
+      <div class="ward-picker-card">
+        <div class="ward-picker-icon">🏛️</div>
+        <select id="wardSelect" class="ward-picker-select">
+          <option value="">Loading wards...</option>
+        </select>
+        <div class="ward-picker-arrow">▼</div>
+      </div>
+
+      <!-- Water Quality Live Status Card -->
+      <a id="wqiCardLink" href="#" class="wqi-card">
+        <div class="wqi-left">
+          <div class="wqi-label" id="wqiWardLabel">Water Quality (Ward 1)</div>
+          <div class="wqi-status-badge">
+            <span class="wqi-status-icon" id="wqiIcon">✓</span>
+            <span id="wqiStatusText">Safe to Use</span>
+          </div>
+          <div class="wqi-date" id="wqiDate">Checking latest records...</div>
+        </div>
+        <div class="wqi-divider"></div>
+        <div class="wqi-gauge">
+          <svg class="gauge-svg" viewBox="0 0 100 55">
+            <path d="M 12 50 A 38 38 0 0 1 88 50" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="8" stroke-linecap="round"/>
+            <path id="gaugeArc" d="M 12 50 A 38 38 0 0 1 88 50" fill="none" stroke="#22d3ee" stroke-width="8" stroke-linecap="round" stroke-dasharray="120" stroke-dashoffset="15"/>
+          </svg>
+          <div class="gauge-score">
+            <span id="wqiScore">92</span><small>/100</small>
+          </div>
+          <div class="gauge-label">Water Quality Index ⓘ</div>
+        </div>
+      </a>
+
+      <!-- Quick Actions Section -->
+      <div class="section-header">
+        <div class="section-title">
+          <span style="color: #0284c7;">⚡</span> Quick Actions
+        </div>
+        <a href="#" class="section-link" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">View All →</a>
+      </div>
+
+      <!-- 3x2 Action Tiles -->
+      <div class="actions-grid">
+        <!-- 1. View Water Quality -->
+        <a id="viewBtn" href="#" class="action-tile tile-blue">
+          <div class="action-icon">💧</div>
+          <div class="action-title">View<br>Water Quality</div>
+        </a>
+
+        <!-- 2. Scan Ward QR Code -->
+        <a href="scan.html" class="action-tile tile-green">
+          <div class="action-icon">📷</div>
+          <div class="action-title">Scan Ward<br>QR Code</div>
+        </a>
+
+        <!-- 3. Report a Problem -->
+        <a id="reportProblemBtn" href="complaint.html" class="action-tile tile-red">
+          <div class="action-icon">⚠️</div>
+          <div class="action-title">Report<br>a Problem</div>
+        </a>
+
+        <!-- 4. Track Complaint -->
+        <a href="track.html" class="action-tile tile-purple">
+          <div class="action-icon">📋</div>
+          <div class="action-title">Track<br>Complaint</div>
+        </a>
+
+        <!-- 5. My Complaints -->
+        <a href="my-complaints.html" class="action-tile tile-amber">
+          <div class="action-icon">📝</div>
+          <div class="action-title">My<br>Complaints</div>
+        </a>
+
+        <!-- 6. View Hotspot Map -->
+        <a href="map.html" class="action-tile tile-teal">
+          <div class="action-icon">📍</div>
+          <div class="action-title">View<br>Hotspot Map</div>
+        </a>
+      </div>
+
+      <!-- Ward QR Codes Featured Banner -->
+      <a href="qr.html" class="featured-banner">
+        <div class="banner-img">🗺️</div>
+        <div class="banner-text">
+          <div class="banner-title">Ward QR Codes</div>
+          <div class="banner-desc">View and manage ward-specific QR codes for water testing</div>
+        </div>
+        <div class="banner-btn-circle">→</div>
+      </a>
+
+      <!-- Admin Login Bar -->
+      <a href="admin-login.html" class="admin-login-bar">
+        <div class="admin-login-bar-left">
+          <span>🛡️</span>
+          <span>Admin Login</span>
+        </div>
+        <span>→</span>
+      </a>
+    </main>
+
+    <!-- Bottom Floating Navigation Bar -->
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-link active">
+        <span class="nav-icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a id="navWaterLink" href="water.html" class="nav-link">
+        <span class="nav-icon">💧</span>
+        <span>Water Quality</span>
+      </a>
+      <a href="scan.html" class="nav-link">
+        <span class="nav-icon">📷</span>
+        <span>Scan QR</span>
+      </a>
+      <a href="my-complaints.html" class="nav-link">
+        <span class="nav-icon">📝</span>
+        <span>Complaints</span>
+      </a>
+      <a href="map.html" class="nav-link">
+        <span class="nav-icon">📍</span>
+        <span>Map</span>
+      </a>
+    </nav>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>

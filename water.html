@@ -7,12 +7,41 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header><h1 id="title">Water Quality</h1></header>
-  <main>
-    <div id="result">Loading...</div>
-    <a class="btn" href="index.html">← Back</a>
-    <a class="btn" id="reportBtn" href="complaint.html">Report a Problem</a>
-  </main>
+  <div class="app-container">
+    <header class="page-header">
+      <a href="index.html" class="back-btn">←</a>
+      <h1 id="title">Water Quality</h1>
+    </header>
+
+    <main class="main-content">
+      <div id="result">Loading...</div>
+      <a class="btn" id="reportBtn" href="complaint.html">📝 Report a Problem</a>
+      <a class="btn btn-outline" href="index.html">← Back to Home</a>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-link">
+        <span class="nav-icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="water.html" class="nav-link active">
+        <span class="nav-icon">💧</span>
+        <span>Water Quality</span>
+      </a>
+      <a href="scan.html" class="nav-link">
+        <span class="nav-icon">📷</span>
+        <span>Scan QR</span>
+      </a>
+      <a href="my-complaints.html" class="nav-link">
+        <span class="nav-icon">📝</span>
+        <span>Complaints</span>
+      </a>
+      <a href="map.html" class="nav-link">
+        <span class="nav-icon">📍</span>
+        <span>Map</span>
+      </a>
+    </nav>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>

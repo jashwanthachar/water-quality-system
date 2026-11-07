@@ -3,39 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Report a Problem</title>
+  <title>Report Water Problem</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header><h1>📝 Report Water Problem</h1></header>
-  <main>
-    <div class="card" id="formBox">
-      <label>Ward</label>
-      <select id="ward"></select>
+  <div class="app-container">
+    <header class="page-header">
+      <a href="index.html" class="back-btn">←</a>
+      <h1>📝 Report Water Problem</h1>
+    </header>
 
-      <label>Problem</label>
-      <select id="category">
-        <option>Pipeline leakage</option>
-        <option>Muddy water</option>
-        <option>Low supply</option>
-        <option>Bad smell / taste</option>
-        <option>No supply</option>
-        <option>Other</option>
-      </select>
+    <main class="main-content">
+      <div class="card" id="formBox">
+        <label for="ward">Ward</label>
+        <select id="ward"></select>
 
-      <label>Description</label>
-      <textarea id="description" rows="4" placeholder="Describe the problem..."></textarea>
+        <label for="category">Problem Category</label>
+        <select id="category">
+          <option>Pipeline leakage</option>
+          <option>Muddy water</option>
+          <option>Low supply</option>
+          <option>Bad smell / taste</option>
+          <option>No supply</option>
+          <option>Other</option>
+        </select>
 
-      <label>Photo (optional, max 2 MB)</label>
-      <input type="file" id="photo" accept="image/*" />
+        <label for="description">Detailed Description</label>
+        <textarea id="description" rows="4" placeholder="Describe the problem, street address, or landmarks..."></textarea>
 
-      <button id="submitBtn">Submit</button>
-      <p id="error" class="error"></p>
-    </div>
+        <label for="photo">Incident Photo (Optional, Max 2 MB)</label>
+        <input type="file" id="photo" accept="image/*" style="margin-bottom: 14px;" />
 
-    <div id="success"></div>
-    <a class="btn" href="index.html">← Home</a>
-  </main>
+        <button id="submitBtn">Submit Grievance</button>
+        <p id="error" class="error"></p>
+      </div>
+
+      <div id="success"></div>
+      <a class="btn btn-outline" href="index.html">← Back to Home</a>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-link">
+        <span class="nav-icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="water.html" class="nav-link">
+        <span class="nav-icon">💧</span>
+        <span>Water Quality</span>
+      </a>
+      <a href="scan.html" class="nav-link">
+        <span class="nav-icon">📷</span>
+        <span>Scan QR</span>
+      </a>
+      <a href="my-complaints.html" class="nav-link active">
+        <span class="nav-icon">📝</span>
+        <span>Complaints</span>
+      </a>
+      <a href="map.html" class="nav-link">
+        <span class="nav-icon">📍</span>
+        <span>Map</span>
+      </a>
+    </nav>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>

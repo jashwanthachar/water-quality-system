@@ -8,15 +8,15 @@
   <style>
     #reader {
       width: 100%;
-      max-width: 400px;
+      max-width: 360px;
       margin: 12px auto;
-      border-radius: 10px;
+      border-radius: var(--radius-md);
       overflow: hidden;
       background: #000;
-      min-height: 250px;
+      min-height: 240px;
     }
     #reader video {
-      border-radius: 10px;
+      border-radius: var(--radius-md);
       width: 100% !important;
       height: auto !important;
     }
@@ -30,25 +30,54 @@
   </style>
 </head>
 <body>
-  <header><h1>📷 Scan Ward QR Code</h1></header>
-  <main>
-    <div class="card" style="text-align:center">
-      <p>Point your camera at a ward water information QR code.</p>
+  <div class="app-container">
+    <header class="page-header">
+      <a href="index.html" class="back-btn">←</a>
+      <h1>📷 Scan Ward QR Code</h1>
+    </header>
 
-      <div id="reader"></div>
-      <div id="scanStatus" class="scan-status" style="display:none;"></div>
+    <main class="main-content">
+      <div class="card" style="text-align: center;">
+        <p style="font-size: 13.5px; color: #64748b; margin-bottom: 8px;">Point your camera at a ward water information QR code.</p>
 
-      <div style="margin-top: 16px;">
-        <p><small>Or select a photo containing a QR code:</small></p>
-        <input type="file" id="qrFileInput" accept="image/*" style="display:none;" />
-        <button type="button" class="btn btn-outline" onclick="document.getElementById('qrFileInput').click()">
-          📁 Upload QR Image from Gallery
-        </button>
+        <div id="reader"></div>
+        <div id="scanStatus" class="scan-status" style="display:none;"></div>
+
+        <div style="margin-top: 14px;">
+          <p><small>Or select a photo containing a QR code:</small></p>
+          <input type="file" id="qrFileInput" accept="image/*" style="display:none;" />
+          <button type="button" class="btn btn-outline" onclick="document.getElementById('qrFileInput').click()">
+            📁 Upload QR Image from Gallery
+          </button>
+        </div>
       </div>
-    </div>
 
-    <a class="btn" href="index.html">← Home</a>
-  </main>
+      <a class="btn btn-outline" href="index.html">← Back to Home</a>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-link">
+        <span class="nav-icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="water.html" class="nav-link">
+        <span class="nav-icon">💧</span>
+        <span>Water Quality</span>
+      </a>
+      <a href="scan.html" class="nav-link active">
+        <span class="nav-icon">📷</span>
+        <span>Scan QR</span>
+      </a>
+      <a href="my-complaints.html" class="nav-link">
+        <span class="nav-icon">📝</span>
+        <span>Complaints</span>
+      </a>
+      <a href="map.html" class="nav-link">
+        <span class="nav-icon">📍</span>
+        <span>Map</span>
+      </a>
+    </nav>
+  </div>
 
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <script>
@@ -70,7 +99,6 @@
         }
       } catch (e) {}
 
-      // Check if it has a ward parameter (e.g. ?ward=3 or ward=3)
       const wardMatch = decodedText.match(/[?&]ward=(\d+)/i) || decodedText.match(/^(\d+)$/);
       if (wardMatch) {
         const wardId = wardMatch[1];
@@ -78,13 +106,11 @@
         return;
       }
 
-      // If it is a full or relative URL pointing to water.html
       if (decodedText.includes("water.html")) {
         window.location.href = decodedText;
         return;
       }
 
-      // If it is any valid URL
       if (decodedText.startsWith("http://") || decodedText.startsWith("https://")) {
         window.location.href = decodedText;
         return;
@@ -102,9 +128,7 @@
         { facingMode: "environment" },
         config,
         (decodedText) => handleDecodedText(decodedText),
-        (errorMessage) => {
-          // Frame decode errors can be safely ignored while camera seeks
-        }
+        (errorMessage) => {}
       ).catch(err => {
         console.warn("Camera start failed:", err);
         document.getElementById("reader").innerHTML = `
@@ -115,7 +139,6 @@
       });
     }
 
-    // Support gallery file upload
     document.getElementById("qrFileInput").addEventListener("change", async (e) => {
       const file = e.target.files[0];
       if (!file) return;

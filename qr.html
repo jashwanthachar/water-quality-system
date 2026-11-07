@@ -7,41 +7,68 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header><h1>📱 Ward QR Code</h1></header>
-  <main>
-    <div class="card" style="text-align:center">
-      <label for="ward">Select Ward:</label>
-      <select id="ward"></select>
+  <div class="app-container">
+    <header class="page-header">
+      <a href="index.html" class="back-btn">←</a>
+      <h1>📱 Ward QR Code</h1>
+    </header>
 
-      <div id="localWarning" class="banner warning" style="display:none; text-align:left;">
-        <b>⚠️ Phone Scanning Notice:</b><br>
-        You are currently viewing on <code>localhost / 127.0.0.1</code>. If you scan this code with your phone camera, your phone cannot connect to <code>127.0.0.1</code> on your PC.
-        <br><br>
-        To test scanning on your phone (on the same Wi-Fi):
-        <br>
-        <button type="button" id="useWifiBtn" class="small-btn" style="background:#0077b6; color:white; margin:6px 0; cursor:pointer;">
-          📡 Switch QR to PC Wi-Fi IP (192.168.31.100)
-        </button>
-        <br>
-        <small>Or open <b><a id="lanUrlLink" href="http://192.168.31.100:5500" target="_blank" style="color:#0077b6;">http://192.168.31.100:5500</a></b> directly on your phone's browser.</small>
+    <main class="main-content">
+      <div class="card" style="text-align: center;">
+        <label for="ward">Select Ward:</label>
+        <select id="ward"></select>
+
+        <div id="localWarning" class="banner warning" style="display:none; text-align:left;">
+          <b>⚠️ Phone Scanning Notice:</b><br>
+          You are currently viewing on <code>localhost / 127.0.0.1</code>. If you scan this code with your phone camera, your phone cannot connect to <code>127.0.0.1</code> on your PC.
+          <br><br>
+          <button type="button" id="useWifiBtn" class="small-btn" style="background:#0077b6; color:white; margin:6px 0; cursor:pointer;">
+            📡 Switch QR to PC Wi-Fi IP (192.168.31.100)
+          </button>
+          <br>
+          <small>Or open <b><a id="lanUrlLink" href="http://192.168.31.100:5500" target="_blank" style="color:#0077b6;">http://192.168.31.100:5500</a></b> on your phone.</small>
+        </div>
+
+        <div style="text-align: left; margin: 10px 0;">
+          <label for="baseUrl">QR Destination Base URL:</label>
+          <input type="text" id="baseUrl" />
+          <small style="color: #64748b;">This address is encoded inside the QR code.</small>
+        </div>
+
+        <h3 id="qrTitle" style="margin-top: 16px;"></h3>
+        <div id="qrBox" style="display: inline-block; margin: 12px 0;"></div>
+        <p><small id="qrLink" style="word-break: break-all; font-weight: bold; color: #0284c7;"></small></p>
+
+        <a id="dl" class="btn" download="ward-qr.png" href="#">⬇️ Download QR Image</a>
+        <a class="btn btn-outline" href="scan.html">📷 Open Camera Scanner</a>
       </div>
 
-      <div style="text-align:left; margin: 10px 0;">
-        <label for="baseUrl">QR Destination Base URL:</label>
-        <input type="text" id="baseUrl" />
-        <small style="color:#666;">This is the website address encoded into the QR code.</small>
-      </div>
+      <a class="btn btn-outline" href="index.html">← Back to Home</a>
+    </main>
 
-      <h3 id="qrTitle" style="margin-top:16px;"></h3>
-      <div id="qrBox" style="display:inline-block; margin: 12px 0;"></div>
-      <p><small id="qrLink" style="word-break:break-all; font-weight:bold; color:#0077b6;"></small></p>
-
-      <a id="dl" class="btn" download="ward-qr.png" href="#">⬇️ Download QR image</a>
-      <a class="btn btn-scan" href="scan.html">📷 Test Scanner on Camera</a>
-    </div>
-
-    <a class="btn" href="index.html">← Home</a>
-  </main>
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-link">
+        <span class="nav-icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="water.html" class="nav-link">
+        <span class="nav-icon">💧</span>
+        <span>Water Quality</span>
+      </a>
+      <a href="scan.html" class="nav-link">
+        <span class="nav-icon">📷</span>
+        <span>Scan QR</span>
+      </a>
+      <a href="my-complaints.html" class="nav-link">
+        <span class="nav-icon">📝</span>
+        <span>Complaints</span>
+      </a>
+      <a href="map.html" class="nav-link">
+        <span class="nav-icon">📍</span>
+        <span>Map</span>
+      </a>
+    </nav>
+  </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -53,11 +80,9 @@
     const useWifiBtn = document.getElementById("useWifiBtn");
     let wards = [];
 
-    // Calculate current folder path
     const currentPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
     let initialBase = window.location.origin + currentPath;
 
-    // Detect if running on localhost / loopback
     const isLocalhost = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost";
     const localWifiIp = "192.168.31.100";
     const port = window.location.port ? `:${window.location.port}` : "";
@@ -90,7 +115,7 @@
       document.getElementById("qrLink").textContent = url;
       const box = document.getElementById("qrBox");
       box.innerHTML = "";
-      new QRCode(box, { text: url, width: 240, height: 240 });
+      new QRCode(box, { text: url, width: 220, height: 220 });
 
       setTimeout(() => {
         const canvas = box.querySelector("canvas");
